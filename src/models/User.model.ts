@@ -1,71 +1,56 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IMessage extends Document {
-  content: string;
-  createdAt: Date;
+
+export interface UserI extends Document {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+    allTests?: mongoose.Types.ObjectId[];
+    isVerified?: boolean;
+    otp?: string;
+    otpExpiry?: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-const MessageSchema = new Schema<IMessage>({
-  content: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
-
-export interface IUser extends Document {
-  username: string;
-  email: string;
-  password: string;
-  messages: IMessage[];
-  isVerified: boolean;
-  verificationToken: string;
-  verificationTokenExpiry: Date;
-  availableForMessages: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const UserSchema = new Schema<IUser>(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
+const userSchema = new Schema<UserI>(
+    {
+        name: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        password: {
+            type: String,
+            required: true,
+        },
+        role: {
+            type: String,
+            required: true,
+            enum: ['teacher', 'student'],
+        },
+        allTests: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'TestModel',
+            },
+        ],
+        isVerified: {
+            type: Boolean,
+            default: false,
+        },
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    messages: [MessageSchema],
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    verificationToken: {
-      type: String,
-    },
-    verificationTokenExpiry: {
-      type: Date,
-    },
-    availableForMessages: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  { timestamps: true }
+    { timestamps: true }
 );
 
 const UserModel =
-  (mongoose.models.User as mongoose.Model<IUser>) ||
-  mongoose.model<IUser>("User", UserSchema);
+    (mongoose.models.UserModel as mongoose.Model<UserI>) ||
+    mongoose.model<UserI>('UserModel', userSchema);
 export default UserModel;

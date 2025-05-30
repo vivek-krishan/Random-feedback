@@ -1,12 +1,12 @@
 import { Text, Heading, Button } from "@react-email/components";
 
 interface VerificationEmailProps {
-  username: string;
+  name: string;
   otp: string;
 }
 
 export default function VerificationEmail({
-  username,
+  name,
   otp,
 }: VerificationEmailProps) {
   return (
@@ -31,7 +31,7 @@ export default function VerificationEmail({
               Verification Email
             </Text>
             <Heading as="h1" className="m-0 mt-[4px] font-bold text-white">
-              Hello {username},
+              Hello {name},
             </Heading>
             <Text className="m-0 mt-[8px] text-[16px] text-white leading-[24px]">
               Uncover the power of accent furniture in transforming your space

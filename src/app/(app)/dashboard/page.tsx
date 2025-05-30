@@ -6,7 +6,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { Button } from '@/components/ui/button';
+<<<<<<< HEAD
 import { IMessage } from '@/models/User.model';
+=======
+import { IMessage } from '@/models/user.model';
+>>>>>>> 8d22a9d64aa75489dc6503aec8135c2147a5268b
 import { acceptMessageSchema } from '@/schemas/acceptMessage.Schema';
 import { ApiErrorInterface } from '@/types/ApiError';
 import { ApiResponseInterface } from '@/types/ApiResponse';
@@ -69,8 +73,14 @@ export default function Dashboard() {
                     fetchMessages: true,
                     acceptMessages: false,
                 }));
+<<<<<<< HEAD
                 const response =
                     await axios.get<ApiResponseInterface>('/api/get-messages');
+=======
+                const response = await axios.get<ApiResponseInterface>(
+                    '/api/get-messages'
+                );
+>>>>>>> 8d22a9d64aa75489dc6503aec8135c2147a5268b
 
                 if (response.status === 201) {
                     setMessages(

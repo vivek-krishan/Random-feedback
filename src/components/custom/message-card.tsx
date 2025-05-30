@@ -21,7 +21,11 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
+<<<<<<< HEAD
 import { IMessage } from '@/models/User.model';
+=======
+import { IMessage } from '@/models/user.model';
+>>>>>>> 8d22a9d64aa75489dc6503aec8135c2147a5268b
 import axios from 'axios';
 import { ApiResponseInterface } from '@/types/ApiResponse';
 import { toast } from 'sonner';
