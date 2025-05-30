@@ -20,9 +20,11 @@ export const authOptions: NextAuthOptions = {
         await dbConnect();
 
         try {
+
           const user = await UserModel.findOne({
-            email: credentials.identifiers,
+              email: credentials.identifier,
           });
+
 
           if (!user) throw new Error("User not found!");
           if (!user.isVerified) throw new Error("Please verify before sign-in");

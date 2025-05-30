@@ -15,8 +15,8 @@ export async function GET(request: Request) {
         return ApiError(402, false, 'User is not logged in!');
     }
 
-    const sessionUser: User = session.user as User;
-    const userId = new mongoose.Types.ObjectId(sessionUser._id);
+    const sessionUser: User = session.user as User; 
+    const userId = new mongoose.Types.ObjectId(sessionUser._id); // converting the normal string to mongoDB ObjectId
 
     try {
         const user = await UserModel.aggregate([
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
             201,
             true,
             'Fetched all the messages',
-            user[0].messages
+            user[0]
         );
     } catch (error) {
         console.error('Error in finding messages: ', error);

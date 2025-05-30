@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         }
 
         const isValidCode = user.verificationToken === code;
-        const isExpired = new Date(user.verificationTokenExpiry) > new Date();
+        const isExpired = new Date(user.verificationTokenExpiry) < new Date();
 
         if (!isValidCode) {
             return ApiError(401, false, 'Otp is not correct!');

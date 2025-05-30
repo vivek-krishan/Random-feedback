@@ -63,7 +63,7 @@ export async function GET(request: Request) {
         const user = await UserModel.findById(sessionUser._id);
         if (!user) return ApiError(404, false, 'User not found!');
 
-        return ApiResponse(200, true, 'Status found', [], user);
+        return ApiResponse(201, true, 'Status found', [], user);
     } catch (error) {
         console.error("Error in finding user's message acceptance status!");
         return ApiError(
