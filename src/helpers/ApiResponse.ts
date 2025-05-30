@@ -1,23 +1,18 @@
 import { ApiResponseInterface } from '@/types/ApiResponse';
-import { IMessage } from '@/models/User.model';
 
-function ApiResponse(
+function ApiResponse<T>(
     status: number,
     success: boolean,
     message: string,
-    messageData?: Array<IMessage>,
-    data?: object,
-    dataArray?: Array<object>,
-    isAcceptingMessages?: boolean
+    data?: T,
+    dataArray?: T[]
 ): Response {
-    const successData: ApiResponseInterface = {
+    const successData: ApiResponseInterface<T> = {
         status,
         success,
         message,
-        messageData,
         data,
         dataArray,
-        isAcceptingMessages,
     };
 
     return Response.json(successData, { status: status });

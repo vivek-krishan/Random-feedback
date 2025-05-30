@@ -1,7 +1,7 @@
 import dbConnect from '@/lib/dbConnection';
-import UserModel from '@/models/User.model';
+import UserModel, { UserI } from '@/models/user.model';
 import { z } from 'zod';
-import { verifySchema } from '@/schemas/verify.Schema';
+import { verifySchema } from '@/schemas/verifyCode.schema';
 import ApiError from '@/helpers/ApiError';
 import ApiResponse from '@/helpers/ApiResponse';
 
@@ -9,9 +9,9 @@ export async function POST(request: Request) {
     await dbConnect();
 
     try {
-        const { username, code } = await request.json();
+        const { email, code } = await request.json();
 
-        if (!username || !code) ApiError(404, false, 'All fields are required');
+        if (!email || !code) ApiError(404, false, 'All fields are required');
 
         const result = verifySchema.safeParse({ code });
 
@@ -26,15 +26,15 @@ export async function POST(request: Request) {
             );
         }
 
-        const user = await UserModel.findOne({ username });
+        const user = await UserModel.findOne({ email });
         if (!user) return ApiError(404, false, 'User not found!');
 
         if (user.isVerified) {
             return ApiError(402, false, 'User is already verified!');
         }
 
-        const isValidCode = user.verificationToken === code;
-        const isExpired = new Date(user.verificationTokenExpiry) > new Date();
+        const isValidCode = user.otp === code;
+        const isExpired = new Date(user.otpExpiry as Date) < new Date();
 
         if (!isValidCode) {
             return ApiError(401, false, 'Otp is not correct!');
@@ -44,23 +44,16 @@ export async function POST(request: Request) {
         }
 
         user.isVerified = true;
+        user.otp = undefined; // Clear the OTP after successful verification
+        user.otpExpiry = undefined; // Clear the OTP expiry after successful verification
         await user.save();
 
         // Extracting those fields which I don't want to sent to the frontend from the user
-        const userData = (({
-            verificationToken,
-            verificationTokenExpiry,
-            password,
-            ...object
-        }) => object)(user); // Remove properties verificationToken, verificationTokenExpiry, and password
+        // const userData = (({ otp, otpExpiry, password, ...object }) => object)(
+        //     user
+        // ); // Remove properties verificationToken, verificationTokenExpiry, and password
 
-        return ApiResponse(
-            201,
-            true,
-            'User verified successfully',
-            [],
-            userData
-        );
+        return ApiResponse<UserI>(201, true, 'User verified successfully');
     } catch (error) {
         console.error('Error in verifying the user', error);
         return ApiError(401, false, 'Error in verifying the user');

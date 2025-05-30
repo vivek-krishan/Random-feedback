@@ -1,6 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const signInSchema = z.object({
-  identifier: z.string(),
-  password: z.string(),
+    email: z.string(),
+    password: z.string(),
+    role: z.enum(['teacher', 'student']),
 });
